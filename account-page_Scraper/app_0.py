@@ -53,7 +53,8 @@ def get_data(url):
 urls = [
     "https://www.facebook.com/LeonardoDiCaprio",
     "https://www.facebook.com/zuck",
-    "https://www.facebook.com/cristiano"
+    "https://www.facebook.com/cristiano",
+    "https://web.facebook.com/leomessi"
 ]
 
 all_profiles = []  # সব প্রোফাইলের ডেটা রাখবে
@@ -262,8 +263,6 @@ for url in urls:
             print("✅ Profile Following", uri_value)
         else:
             print("⚠️ URI key not found in Following")
-    else:
-        print("⚠️ content[1] not found.")
 
     path = [
         "result",
@@ -278,21 +277,19 @@ for url in urls:
     content_list = find_value(data, path)
 
     if isinstance(content_list, list) and len(content_list) > 1:
-        uri_value = content_list[0].get("uri")
-        if uri_value:
-            print("✅ Profile Following", uri_value)
+        uris_value = content_list[0].get("uri")
+        if uris_value:
+            print("✅ Profile Following", uris_value)
         else:
             print("⚠️ URI key not found in Following")
-    else:
-        print("⚠️ content[1] not found.")  
-
+    
 
     output_data = {
         "user_url": user_url,
         "profile_name": profile_name if user_url else None,
         "followers": followers_text if 'followers_text' in locals() else None,
         "following": following_text if 'following_text' in locals() else None,
-        "followers_uri": uri_value,
+        "followers_uri":  uris_value,
         "following_uri": uri_value,
         "collection_id": node_id if 'node_id' in locals() else None,
         "user_id": user_id,
@@ -300,17 +297,18 @@ for url in urls:
     }
 
 
-    # 🔹 যদি একাধিক প্রোফাইল থেকে ডেটা নিতে চাও তাহলে সবগুলোর ডেটা list আকারে রাখো
+    
     all_data = []
     all_data.append(output_data)
 
-    # JSON ফাইলে list আকারে লিখো
+ 
     all_profiles.append(output_data)
 
-    # লুপ শেষে সব ডেটা একসাথে সেভ করবে
+    
     with open("output.json", "w", encoding="utf-8") as f:
         json.dump(all_profiles, f, ensure_ascii=False, indent=4)
 
     print(f"\n💾 Saved {len(all_profiles)} profiles to output.json successfully!")
+
 
 
